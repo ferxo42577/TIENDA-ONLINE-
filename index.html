@@ -203,11 +203,11 @@
         <div class="space-y-2">
           <div class="flex justify-between text-xs text-stone-500 font-medium">
             <span>Subtotal</span>
-            <span id="cart-subtotal">$0.00</span>
+            <span id="cart-subtotal">0 Bs</span>
           </div>
           <div class="flex justify-between text-base font-extrabold text-stone-900">
             <span>Total Estimado</span>
-            <span id="cart-total" class="text-rose-gold text-lg">$0.00</span>
+            <span id="cart-total" class="text-rose-gold text-lg">0 Bs</span>
           </div>
         </div>
 
@@ -229,6 +229,23 @@
       <i class="fa-solid fa-basket-shopping"></i>
       Ver Carrito (<span id="mobile-cart-count">0</span>)
     </button>
+  </div>
+
+  <!-- CUSTOM FLOATING NOTIFICATION MODAL (Replaces intrusive window.alert) -->
+  <div id="custom-alert-modal" class="fixed inset-0 z-50 flex items-center justify-center px-4 pointer-events-none opacity-0 transition-opacity duration-300">
+    <div class="absolute inset-0 bg-stone-900/40 backdrop-blur-sm"></div>
+    <div class="bg-white rounded-3xl p-6 border border-rose-100 max-w-sm w-full shadow-2xl relative z-10 pointer-events-auto transform scale-95 transition-transform duration-300">
+      <div class="text-center">
+        <div class="w-12 h-12 rounded-full bg-amber-50 text-amber-500 flex items-center justify-center mx-auto mb-4 border border-amber-100">
+          <i class="fa-solid fa-triangle-exclamation text-xl"></i>
+        </div>
+        <h4 class="text-lg font-bold text-stone-900 serif-title mb-2">Atención requerida</h4>
+        <p id="custom-alert-text" class="text-xs text-stone-600 leading-relaxed mb-6 font-medium">Por favor completa todos los campos requeridos.</p>
+        <button onclick="closeAlertModal()" class="w-full bg-rose-gold hover-gold text-white font-extrabold text-xs py-3 rounded-xl shadow-md shadow-rose-200/40 tracking-wider uppercase">
+          Entendido
+        </button>
+      </div>
+    </div>
   </div>
 
   <!-- PREMIUM FOOTER -->
@@ -256,14 +273,14 @@
     const WHATSAPP_DESTINATION = "59164401836";
     const BRAND_NAME = "LUZ CRITAL";
 
-    // Dynamic, realistic high-end products of Luz Crital Salon
+    // Dynamic, realistic high-end products of Luz Crital Salon with prices calibrated in Bolivianos (Bs)
     const products = [
       // MAQUILLAJE (Makeup Category)
       {
         id: "maq-01",
         name: "Maquillaje Social Premium",
         category: "maquillaje",
-        price: 45.00,
+        price: 300,
         description: "Perfecto para eventos de gala. Incluye preparación de piel, contorneado de rostro y sellado de alta duración.",
         image: "https://images.unsplash.com/photo-1522335789203-aabd1fc54bc9?auto=format&fit=crop&w=600&q=80"
       },
@@ -271,7 +288,7 @@
         id: "maq-02",
         name: "Maquillaje de Novia Real",
         category: "maquillaje",
-        price: 120.00,
+        price: 800,
         description: "Servicio premium para novias. Incluye prueba previa de diseño de mirada, maquillaje HD de alta cobertura y asesoría de imagen.",
         image: "https://images.unsplash.com/photo-1487412720507-e7ab37603c6f?auto=format&fit=crop&w=600&q=80"
       },
@@ -279,7 +296,7 @@
         id: "maq-03",
         name: "Maquillaje Editorial / Glam",
         category: "maquillaje",
-        price: 60.00,
+        price: 400,
         description: "Diseñado para sesiones de fotografía profesional o videos. Técnicas dramáticas y texturas vanguardistas de alta gama.",
         image: "https://images.unsplash.com/photo-1512496015851-a90fb38ba796?auto=format&fit=crop&w=600&q=80"
       },
@@ -289,7 +306,7 @@
         id: "unas-01",
         name: "Uñas Soft Gel (Estructura)",
         category: "uñas",
-        price: 35.00,
+        price: 150,
         description: "Extensiones ultraligeras, flexibles e hipoalergénicas con el esmaltado semipermanente de tu preferencia.",
         image: "https://images.unsplash.com/photo-1604654894610-df63bc536371?auto=format&fit=crop&w=600&q=80"
       },
@@ -297,7 +314,7 @@
         id: "unas-02",
         name: "Manicura Rusa + Kapping Gel",
         category: "uñas",
-        price: 25.00,
+        price: 120,
         description: "Limpieza impecable y profunda de cutículas combinada con capa de gel para fortalecer y nivelar tus uñas naturales.",
         image: "https://images.unsplash.com/photo-1632345031435-8797b2d58045?auto=format&fit=crop&w=600&q=80"
       },
@@ -305,7 +322,7 @@
         id: "unas-03",
         name: "Nail Art Personalizado (Mano Alzada)",
         category: "uñas",
-        price: 15.00,
+        price: 50,
         description: "Diseño personalizado elaborado a mano alzada por nuestras artistas. Aplica sobre el set de manicura que elijas.",
         image: "https://images.unsplash.com/photo-1607604276583-eef5d076aa5f?auto=format&fit=crop&w=600&q=80"
       },
@@ -315,7 +332,7 @@
         id: "pest-01",
         name: "Extensiones Clásicas 1D Natural",
         category: "pestañas",
-        price: 40.00,
+        price: 180,
         description: "Efecto rímel orgánico de seda premium, colocadas fibra por fibra para realzar delicadamente tu mirada diaria.",
         image: "https://images.unsplash.com/photo-1583001931096-959e9a1a6223?auto=format&fit=crop&w=600&q=80"
       },
@@ -323,7 +340,7 @@
         id: "pest-02",
         name: "Volumen Ruso 3D/4D Glamour",
         category: "pestañas",
-        price: 55.00,
+        price: 250,
         description: "Mayor densidad, profundidad y efecto aterciopelado. Abanicos hechos artesanalmente a tu medida de alta costura.",
         image: "https://images.unsplash.com/photo-1512496015851-a90fb38ba796?auto=format&fit=crop&w=600&q=80"
       },
@@ -331,7 +348,7 @@
         id: "pest-03",
         name: "Lifting de Pestañas + Nutrición",
         category: "pestañas",
-        price: 30.00,
+        price: 120,
         description: "Tratamiento de queratina orgánica que levanta, alarga y oscurece tus pestañas naturales de forma duradera.",
         image: "https://images.unsplash.com/photo-1516975080664-ed2fc6a32937?auto=format&fit=crop&w=600&q=80"
       }
@@ -368,7 +385,7 @@
               </div>
 
               <div class="flex items-center justify-between mt-6 pt-4 border-t border-stone-50">
-                <span class="text-xl font-extrabold text-stone-900 serif-title">$${p.price.toFixed(2)}</span>
+                <span class="text-xl font-extrabold text-stone-900 serif-title">${p.price} Bs</span>
                 <button onclick="addToCart('${p.id}')" class="bg-rose-gold hover-gold text-white px-4 py-2.5 rounded-xl text-xs font-bold uppercase tracking-wider transition-all duration-300 flex items-center gap-2 shadow-md shadow-rose-200/40">
                   <i class="fa-solid fa-plus text-[10px]"></i> Añadir
                 </button>
@@ -425,7 +442,7 @@
       }
 
       updateCartUI();
-      toggleCart(true); // Auto reveal cart to show feedback
+      toggleCart(true); // Auto reveal and slide open cart drawer to guide checkout
     }
 
     function updateQuantity(id, amount) {
@@ -470,8 +487,8 @@
             <p class="text-xs mt-1">¡Añade tratamientos para consentirte hoy!</p>
           </div>
         `;
-        subtotalEl.textContent = "$0.00";
-        totalEl.textContent = "$0.00";
+        subtotalEl.textContent = "0 Bs";
+        totalEl.textContent = "0 Bs";
         return;
       }
 
@@ -488,7 +505,7 @@
             
             <div class="flex-grow">
               <h4 class="text-xs font-extrabold text-stone-950 pr-4 leading-tight">${item.name}</h4>
-              <p class="text-xs text-rose-gold font-extrabold mt-1">$${item.price.toFixed(2)}</p>
+              <p class="text-xs text-rose-gold font-extrabold mt-1">${item.price} Bs</p>
               
               <div class="flex items-center gap-2 mt-2">
                 <button onclick="updateQuantity('${item.id}', -1)" class="w-7 h-7 rounded-lg bg-white border border-stone-100 hover:bg-stone-100 flex items-center justify-center text-xs text-stone-600 transition-all">
@@ -510,13 +527,30 @@
         itemsContainer.insertAdjacentHTML("beforeend", cartItemHtml);
       });
 
-      subtotalEl.textContent = `$${totalSum.toFixed(2)}`;
-      totalEl.textContent = `$${totalSum.toFixed(2)}`;
+      subtotalEl.textContent = `${totalSum} Bs`;
+      totalEl.textContent = `${totalSum} Bs`;
+    }
+
+    // Helper functions for Custom Modal Alerts
+    function openAlertModal(message) {
+      const modal = document.getElementById("custom-alert-modal");
+      const text = document.getElementById("custom-alert-text");
+      text.textContent = message;
+      modal.classList.remove("pointer-events-none", "opacity-0");
+      modal.querySelector(".transform").classList.remove("scale-95");
+      modal.querySelector(".transform").classList.add("scale-100");
+    }
+
+    function closeAlertModal() {
+      const modal = document.getElementById("custom-alert-modal");
+      modal.classList.add("pointer-events-none", "opacity-0");
+      modal.querySelector(".transform").classList.add("scale-95");
+      modal.querySelector(".transform").classList.remove("scale-100");
     }
 
     function submitToWhatsApp() {
       if (cart.length === 0) {
-        alert("Tu carrito está vacío. Añade algunos servicios antes de continuar.");
+        openAlertModal("Tu carrito está vacío. Añade algunos servicios antes de continuar.");
         return;
       }
 
@@ -526,7 +560,7 @@
       const apptTime = document.getElementById("appt-time").value;
 
       if (!clientName || !apptDate || !apptTime) {
-        alert("Por favor completa los detalles de tu reserva (Nombre, Fecha y Hora) para proceder con tu cita.");
+        openAlertModal("Por favor completa los detalles de tu reserva (Nombre, Fecha y Hora) para proceder con tu cita.");
         return;
       }
 
@@ -546,11 +580,11 @@
       cart.forEach((item, index) => {
         const itemCost = item.price * item.quantity;
         totalSum += itemCost;
-        message += `${index + 1}. *${item.name}* x [${item.quantity}] — *$${itemCost.toFixed(2)}*\n`;
+        message += `${index + 1}. *${item.name}* x [${item.quantity}] — *${itemCost} Bs*\n`;
       });
 
       message += `\n----------------------------------\n`;
-      message += `💰 *Gran Total Final:* *[ $${totalSum.toFixed(2)} ]*\n\n`;
+      message += `💰 *Gran Total Final:* *[ ${totalSum} Bs ]*\n\n`;
       message += `_Por favor, confírmenme la disponibilidad de mi cita. ¡Muchas gracias!_`;
 
       // API formulation using safe URI compilation
